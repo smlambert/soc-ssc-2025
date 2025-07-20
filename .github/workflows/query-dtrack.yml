@@ -18,7 +18,7 @@ jobs:
         DEPENDENCY_TRACK_API_KEY: ${{ secrets.DEP_TRACK_TOKEN }}
       run: |
         echo "Fetching vulnerabilities..."
-        curl -s -H "X-Api-Key: $DEP_TRACK_TOKEN" https://dtapi.northdepot.ca/api/v1/vulnerability
+        curl -H "X-Api-Key: $DEP_TRACK_TOKEN" https://dtapi.northdepot.ca/api/v1/vulnerability
 
 
 
