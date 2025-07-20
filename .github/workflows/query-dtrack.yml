@@ -17,6 +17,7 @@ jobs:
       env:
         DEPENDENCY_TRACK_API_KEY: ${{ secrets.DEP_TRACK_TOKEN }}
       run: |
-        curl -H "X-Api-Key: $DEPENDENCY_TRACK_API_KEY" https://dt.northdepot.ca:8081/api/v1/project
+        curl -H "X-Api-Key: $DEPENDENCY_TRACK_API_KEY" https://dtapi.northdepot.ca/api/v1/project
+
 
 
