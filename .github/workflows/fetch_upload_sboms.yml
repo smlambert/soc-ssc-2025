@@ -39,7 +39,7 @@ jobs:
 
       - id: export         
         run: |
-          matrix=$(jq -c '.' metadata.json)   # Read the JSON file as a single-line JSON array
+          matrix=$(jq -c '.' metadata.json)   
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
   store-each-sbom:
@@ -62,7 +62,7 @@ jobs:
           DTRACK_API_KEY: ${{ secrets.DEP_TRACK_TOKEN }}
         run: |
           echo "Storing SBOM for project: ${{ matrix.projectName }}, version: ${{ matrix.projectVersion }}, parent: ${{ matrix.parentProject }}"
-          cs workspace 
+          cd workspace 
           curl -X POST "$DEPENDENCY_TRACK_URL/api/v1/bom" \
             -H "X-Api-Key: $DTRACK_API_KEY" \
             -H "Content-Type: multipart/form-data" \
