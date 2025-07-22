@@ -1,0 +1,65 @@
+# this is an adapted version of the reusable store-sbom-data.yml workflow to query a different DependencyTrack instance
+
+name: Store SBOM Data for ingestion into ''
+
+on:
+  workflow_call:
+    inputs:
+      projectName:
+        type: string
+        required: true
+      projectVersion:
+        type: string
+        required: true
+      bomArtifact:
+        type: string
+        required: true
+        default: 'sbom'
+      bomFilename:
+        type: string
+        required: true
+      parentProject:
+        type: string
+        required: true
+      dependencyTrackUrl:
+        type: string
+        required: false
+        default: 'https://sbom.eclipse.org'
+    secrets:
+      dtrackApiKey:
+        required: true
+
+jobs:
+  store-sbom-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download SBOM
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.bomArtifact }}
+
+      - name: Generate metadata and rename SBOM if needed
+        shell: bash
+        run: |
+          if [[ "${{ inputs.bomFilename }}" != "bom.json" ]]; then 
+            cp "${{ inputs.bomFilename }}" bom.json
+          fi
+          echo "{
+            \"projectName\": \"${{ inputs.projectName }}\",
+            \"projectVersion\": \"${{ inputs.projectVersion }}\",
+            \"parentProject\": \"${{ inputs.parentProject }}\"
+          }" > metadata.json
+
+      - name: Upload to DependencyTrack
+        env:
+          DTRACK_URL: ${{ inputs.dependencyTrackUrl }}
+          DTRACK_API_KEY: ${{ secrets.dtrackApiKey }}
+        run: |
+          curl -X POST "$DTRACK_URL/api/v1/bom" \
+            -H "X-Api-Key: $DTRACK_API_KEY" \
+            -H "Content-Type: multipart/form-data" \
+            -F "projectName=${{ inputs.projectName }}" \
+            -F "projectVersion=${{ inputs.projectVersion }}" \
+            -F "parent=${{ inputs.parentProject }}" \
+            -F "bom=@sbom.json"
