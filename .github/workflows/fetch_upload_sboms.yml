@@ -69,4 +69,4 @@ jobs:
             -F "projectName=${{ matrix.projectName }}" \
             -F "projectVersion=${{ matrix.projectVersion }}" \
             -F "parent=${{ matrix.parentProject }}" \
-            -F "bom=@bom.json"
+            -F "bom=@sbom.json"
