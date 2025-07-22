@@ -3,6 +3,7 @@
 # used in fetch_upload_sboms.yml to fetch SBOMs from the Adoptium API and store them in a local directory
 
 import os
+import pathlib
 import requests
 import json
 import time
@@ -66,6 +67,7 @@ def fetch_sboms():
 
             os_arch = f"{os_name} {arch}"
             # save path 
+            # folder = pathlib.Path("sboms") / os_arch / f"jdk-{version}"
             folder = sbom_dir / os_arch / f"jdk-{version}"
             folder.mkdir(parents=True, exist_ok=True)
             path = folder / "sbom.json"
@@ -85,7 +87,7 @@ def fetch_sboms():
                 "windows x64": "14cf7d68-ca5c-4136-91bf-0a7d97ab3980",  
             }
             metadata.append({
-                "path": str(path),
+                "path": str(path.as_posix()),
                 "projectName": project_name,
                 "projectVersion": version,
                 "parentProject": parent_uuids.get(os_arch, ""),
