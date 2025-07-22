@@ -5,14 +5,12 @@ on:
 
 env:
   DEPENDENCY_TRACK_URL: https://dt.northdepot.ca
-  # PROJECT_ROOT: Temurin
-  # JAVA_VERSION: JDK 21
 
 jobs:
   fetch-sboms:
     runs-on: ubuntu-latest
 
-    outputs:  # Expose matrix output for next job
+    outputs: 
       sbom-metadata: ${{ steps.export.outputs.matrix }}
 
     steps:
@@ -36,10 +34,10 @@ jobs:
         with:
           name: sboms
           path: |
-            sboms/         # Folder with downloaded SBOMs
-            metadata.json  # JSON metadata for the next matrix job
+            sboms/         
+            metadata.json  
 
-      - id: export         # Step to read metadata.json and output a JSON matrix
+      - id: export         
         run: |
           matrix=$(jq -c '.' metadata.json)   # Read the JSON file as a single-line JSON array
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
@@ -51,7 +49,6 @@ jobs:
     strategy:
       matrix:
         include: ${{ fromJson(needs.fetch-sboms.outputs.sbom-metadata) }}
-        # This creates one matrix job per object in the metadata.json list
 
     steps:
       - name: Download SBOMs
@@ -60,7 +57,7 @@ jobs:
           name: sboms
           path: workspace
 
-      - name: Store SBOM in DependencyTrack   # Reusable workflow that uploads to DependencyTrack
+      - name: Store SBOM in DependencyTrack   
         env:
           DTRACK_API_KEY: ${{ secrets.DEP_TRACK_TOKEN }}
         run: |
