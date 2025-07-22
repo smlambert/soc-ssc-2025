@@ -69,6 +69,7 @@ jobs:
           fi
 
           cd workspace 
+          ls -l "workspace/${{ matrix.path }}"
           curl -X POST "$DEPENDENCY_TRACK_URL/api/v1/bom" \
             -H "X-Api-Key: $DTRACK_API_KEY" \
             -H "Content-Type: multipart/form-data" \
