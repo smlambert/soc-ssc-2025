@@ -54,7 +54,7 @@ jobs:
       - name: Upload to DependencyTrack
         env:
           DTRACK_URL: ${{ inputs.dependencyTrackUrl }}
-          DTRACK_API_KEY: ${{ secrets.dtrackApiKey }}
+          DTRACK_API_KEY: ${{ secrets.DEP_TRACK_TOKEN }}
         run: |
           curl -X POST "$DTRACK_URL/api/v1/bom" \
             -H "X-Api-Key: $DTRACK_API_KEY" \
