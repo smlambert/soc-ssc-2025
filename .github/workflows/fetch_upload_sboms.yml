@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  DEPENDENCY_TRACK_URL: https://dt.northdepot.ca
+  DEPENDENCY_TRACK_URL: https://dtapi.northdepot.ca/
 
 jobs:
   fetch-sboms:
