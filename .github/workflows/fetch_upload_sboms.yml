@@ -62,6 +62,12 @@ jobs:
           DTRACK_API_KEY: ${{ secrets.DEP_TRACK_TOKEN }}
         run: |
           echo "Storing SBOM for project: ${{ matrix.projectName }}, version: ${{ matrix.projectVersion }}, parent: ${{ matrix.parentProject }}"
+          
+          if [ -z "${{ matrix.parentProject }}" ]; then
+            echo "Skipping upload — parentProject is missing"
+            exit 0
+          fi
+
           cd workspace 
           curl -X POST "$DEPENDENCY_TRACK_URL/api/v1/bom" \
             -H "X-Api-Key: $DTRACK_API_KEY" \

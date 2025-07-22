@@ -88,7 +88,7 @@ def fetch_sboms():
                 "path": str(path),
                 "projectName": project_name,
                 "projectVersion": version,
-                "parentProject": parent_uuids.get(os_arch, "unknown"),
+                "parentProject": parent_uuids.get(os_arch, ""),
             })
             
     with open("metadata.json", "w") as f:
