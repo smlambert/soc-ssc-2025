@@ -78,7 +78,8 @@ def fetch_sboms():
             sbom_resp.raise_for_status()
             path.write_text(sbom_resp.text)
 
-            project_name = f"{PROJECT_ROOT} / {JAVA_VERSION} / 21-{os_name}-{arch} / jdk-{version}"
+            parent_name = f"{PROJECT_ROOT} / {JAVA_VERSION} / 21-{os_name}-{arch}"
+            child_name = f"jdk-{version}"
             parent_uuids = {
                 "linux-aarch64": "3680ceb0-702f-4ebd-811b-adece3f90a27", 
                 "linux-x64": "6ca279d5-fb01-4957-9f85-de2ed07d3a69", 
@@ -88,7 +89,7 @@ def fetch_sboms():
             }
             metadata.append({
                 "path": str(path.as_posix()),
-                "projectName": project_name,
+                "projectName": child_name,
                 "projectVersion": version,
                 "parentProject": parent_uuids.get(os_arch, ""),
             })
