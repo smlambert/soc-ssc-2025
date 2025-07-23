@@ -80,11 +80,11 @@ def fetch_sboms():
 
             project_name = f"{PROJECT_ROOT} / {JAVA_VERSION} / 21-{os_name}-{arch} / jdk-{version}"
             parent_uuids = {
-                "linux aarch64": "3680ceb0-702f-4ebd-811b-adece3f90a27", 
-                "linux x64": "6ca279d5-fb01-4957-9f85-de2ed07d3a69", 
-                "mac aarch64": "05904a4e-460d-4832-a4d5-4394cbec3c69", 
-                "mac x64": "b7752a97-4fdf-4c38-9557-89791eb11191", 
-                "windows x64": "14cf7d68-ca5c-4136-91bf-0a7d97ab3980",  
+                "linux-aarch64": "3680ceb0-702f-4ebd-811b-adece3f90a27", 
+                "linux-x64": "6ca279d5-fb01-4957-9f85-de2ed07d3a69", 
+                "mac-aarch64": "05904a4e-460d-4832-a4d5-4394cbec3c69", 
+                "mac-x64": "b7752a97-4fdf-4c38-9557-89791eb11191", 
+                "windows-x64": "14cf7d68-ca5c-4136-91bf-0a7d97ab3980",  
             }
             metadata.append({
                 "path": str(path.as_posix()),
