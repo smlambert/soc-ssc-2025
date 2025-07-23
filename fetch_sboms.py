@@ -15,7 +15,7 @@ IMAGE_TYPE = os.environ.get("IMAGE_TYPE", "sbom")
 VENDOR = os.environ.get("VENDOR", "eclipse")
 HEAP_SIZE = os.environ.get("HEAP_SIZE", "normal")
 PAGE_SIZE = int(os.environ.get("PAGE_SIZE", "20"))
-PROJECT_ROOT = os.environ.get("PROJECT_ROOT", "Temurin")
+PROJECT_ROOT = os.environ.get("PROJECT_ROOT", "Eclipse Temurin")
 JAVA_VERSION = os.environ.get("JAVA_VERSION", "JDK 21")
 cutoff_date = datetime(2023, 1, 1).date()
 
@@ -65,7 +65,7 @@ def fetch_sboms():
                 print(f"Skipping {version} ({os_name} {arch}) - no SBOM")
                 continue
 
-            os_arch = f"{os_name} {arch}"
+            os_arch = f"{os_name}-{arch}"
             # save path 
             # folder = pathlib.Path("sboms") / os_arch / f"jdk-{version}"
             folder = sbom_dir / os_arch / f"jdk-{version}"
@@ -78,7 +78,7 @@ def fetch_sboms():
             sbom_resp.raise_for_status()
             path.write_text(sbom_resp.text)
 
-            project_name = f"{PROJECT_ROOT} / {JAVA_VERSION} / {os_name} {arch} / jdk-{version}"
+            project_name = f"{PROJECT_ROOT} / {JAVA_VERSION} / 21-{os_name}-{arch} / jdk-{version}"
             parent_uuids = {
                 "linux aarch64": "3680ceb0-702f-4ebd-811b-adece3f90a27", 
                 "linux x64": "6ca279d5-fb01-4957-9f85-de2ed07d3a69", 
