@@ -8,7 +8,7 @@ jobs:
         id: upload-SBOM
         uses: CryptosoftInc/Dependency-Track-Javascript@1.0.0
         with:
-          dt-url: "https://dtapi.northdepot.ca/api/v1"
+          dt-url: "https://dtapi.northdepot.ca/api/v1/bom"
           api-key: ${{ secrets.DEP_TRACK_TOKEN }}
           project-name: "jdk-21.0.8+9.0.LTS"
           project-version: "21.0.8+9.0.LTS"
