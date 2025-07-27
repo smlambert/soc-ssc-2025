@@ -70,9 +70,9 @@ jobs:
           ls -l "workspace/${{ matrix.path }}"
           curl -X POST "$DEPENDENCY_TRACK_URL/api/v1/bom" \
             -H "X-Api-Key: $DTRACK_API_KEY" \
-            -H "Content-Type: multifpart/form-data" \
+            -H "Content-Type: multipart/form-data" \
             -F "projectName=${{ matrix.projectName }}" \
             -F "projectVersion=${{ matrix.projectVersion }}" \
-            -F "parent=${{ matrix.parentProject }}" \
+            -F "parentUUID=${{ matrix.parentProject }}" \
             -F "bom=@workspace/sboms${{ matrix.path }}" \
             -F "autoCreate=true"
