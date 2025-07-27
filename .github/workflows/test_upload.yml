@@ -1,5 +1,6 @@
 name: test_upload
-on: push
+on: 
+  workflow_dispatch:
 jobs:
   myJob:
     runs-on: ubuntu-latest
