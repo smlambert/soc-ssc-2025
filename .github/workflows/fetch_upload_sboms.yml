@@ -56,18 +56,40 @@ jobs:
         with:
           name: sboms
           path: workspace
-
-      - name: Store SBOM in DependencyTrack   
+      
+      - name: Create project in DependencyTrack
         env:
           DTRACK_API_KEY: ${{ secrets.DEP_TRACK_TOKEN }}
         run: |
-          echo "Storing SBOM for project: ${{ matrix.projectName }}, version: ${{ matrix.projectVersion }}, parent: ${{ matrix.parentProject }}"
-          
+          echo "Creating project: ${{ matrix.projectName }}, version: ${{ matrix.projectVersion }}, parent: ${{ matrix.parentProject }}"
+
           if [ -z "${{ matrix.parentProject }}" ]; then
-            echo "Skipping upload — parentProject is missing"
+            echo "Skipping project creation, parentProject is missing"
             exit 0
           fi
+
+          curl -X PUT "$DEPENDENCY_TRACK_URL/api/v1/project" \
+            -H "X-Api-Key: $DTRACK_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "name": "${{ matrix.projectName }}",
+              "version": "${{ matrix.projectVersion }}",
+              "parent": { "uuid": "${{ matrix.parentProject }}" }
+            }'
+
+      - name: Upload SBOM to DependencyTrack
+        env:
+          DTRACK_API_KEY: ${{ secrets.DEP_TRACK_TOKEN }}
+        run: |
+          echo "Uploading SBOM for project: ${{ matrix.projectName }}, version: ${{ matrix.projectVersion }}"
+
+          if [ -z "${{ matrix.parentProject }}" ]; then
+            echo "Skipping upload, parentProject is missing"
+            exit 0
+          fi
+
           ls -l "workspace/${{ matrix.path }}"
+
           curl -X POST "$DEPENDENCY_TRACK_URL/api/v1/bom" \
             -H "X-Api-Key: $DTRACK_API_KEY" \
             -H "Content-Type: multipart/form-data" \
@@ -75,4 +97,4 @@ jobs:
             -F "projectVersion=${{ matrix.projectVersion }}" \
             -F "parentUUID=${{ matrix.parentProject }}" \
             -F "bom=@workspace/${{ matrix.path }}" \
-            -F "autoCreate=true"
+            -F "autoCreate=false"
