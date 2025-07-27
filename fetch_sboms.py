@@ -79,7 +79,7 @@ def fetch_sboms():
             path.write_text(sbom_resp.text)
 
             parent_name = f"{PROJECT_ROOT} / {JAVA_VERSION} / 21-{os_name}-{arch}"
-            child_name = f"jdk-{version}"
+            child_name = f"jdk-{version}".replace("LTS", "")
             parent_uuids = {
                 "linux-aarch64": "3680ceb0-702f-4ebd-811b-adece3f90a27", 
                 "linux-x64": "6ca279d5-fb01-4957-9f85-de2ed07d3a69", 
