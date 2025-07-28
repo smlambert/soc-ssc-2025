@@ -84,19 +84,11 @@ jobs:
             exit 0
           fi
           
+          json_payload="{\"name\": \"${{ matrix.projectName }}\", \"version\": \"${{ matrix.projectVersion }}\", \"parent\": {\"uuid\": \"${{ matrix.parentProject }}\"}}"
           uuid=$(curl -s -X PUT "$DEPENDENCY_TRACK_URL/api/v1/project" \
             -H "X-Api-Key: $DTRACK_API_KEY" \
             -H "Content-Type: application/json" \
-            -d @- <<EOF
-          {
-            "name": "${{ matrix.projectName }}",
-            "version": "${{ matrix.projectVersion }}",
-            "parent": {
-              "uuid": "${{ matrix.parentProject }}"
-            }
-          }
-          EOF
-          | jq -r '.uuid')
+            -d "$json_payload" | jq -r '.uuid')
           echo "Project UUID: $uuid"
 
           ls -l "workspace/${{ matrix.path }}"
