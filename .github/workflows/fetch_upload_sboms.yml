@@ -71,15 +71,8 @@ jobs:
           curl -X POST "$DEPENDENCY_TRACK_URL/api/v1/project" \
             -H "X-Api-Key: $DTRACK_API_KEY" \
             -H "Content-Type: application/json" \
-            -d "$(cat <<EOF
-          
-            {
-              "name": "${{ matrix.projectName }}",
-              "version": "${{ matrix.projectVersion }}",
-              "parent": { "uuid": "${{ matrix.parentProject }}" }
-            }
-            EOF
-            
+            -d "{\"name\":\"${{ matrix.projectName }}\",\"version\":\"${{ matrix.projectVersion }}\",\"parent\":{\"uuid\":\"${{ matrix.parentProject }}\"}}"
+
 
       - name: Upload SBOM to DependencyTrack
         env:
