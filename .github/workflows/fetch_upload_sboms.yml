@@ -79,7 +79,7 @@ jobs:
               "parent": { "uuid": "${{ matrix.parentProject }}" }
             }
             EOF
-            )"
+            
 
       - name: Upload SBOM to DependencyTrack
         env:
