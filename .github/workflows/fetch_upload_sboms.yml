@@ -73,7 +73,6 @@ jobs:
             -H "Content-Type: application/json" \
             -d "{\"name\":\"${{ matrix.projectName }}\",\"version\":\"${{ matrix.projectVersion }}\",\"parent\":{\"uuid\":\"${{ matrix.parentProject }}\"}}"
 
-
       - name: Upload SBOM to DependencyTrack
         env:
           DTRACK_API_KEY: ${{ secrets.DEP_TRACK_TOKEN }}
@@ -84,14 +83,27 @@ jobs:
             echo "Skipping upload, parentProject is missing"
             exit 0
           fi
+          
+          uuid=$(curl -s -X PUT "$DEPENDENCY_TRACK_URL/api/v1/project" \
+            -H "X-Api-Key: $DTRACK_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d @- <<EOF
+          {
+            "name": "${{ matrix.projectName }}",
+            "version": "${{ matrix.projectVersion }}",
+            "parent": {
+              "uuid": "${{ matrix.parentProject }}"
+            }
+          }
+          EOF
+          | jq -r '.uuid')
+          echo "Project UUID: $uuid"
 
           ls -l "workspace/${{ matrix.path }}"
 
           curl -X POST "$DEPENDENCY_TRACK_URL/api/v1/bom" \
             -H "X-Api-Key: $DTRACK_API_KEY" \
             -H "Content-Type: multipart/form-data" \
-            -F "projectName=${{ matrix.projectName }}" \
-            -F "projectVersion=${{ matrix.projectVersion }}" \
-            -F "parentUUID=${{ matrix.parentProject }}" \
-            -F "bom=@workspace/${{ matrix.path }}" \
-            -F "autoCreate=false"
+            -F "project=$uuid" \
+            -F "autoCreate=false" \
+            -F "bom=@workspace/${{ matrix.path }}"
